@@ -1,0 +1,21 @@
+{
+  "name": "nodejs-v1",
+  "version": "1.0.0",
+  "description": "Memory Refresh",
+  "main": "server.js",
+  "scripts": {
+    "start:dev": "nodemon server.js",
+    "start:prod": "NODE_ENV=production node server.js",
+    "test": "echo \"All Tests Has Been Passed\" && exit 1"
+  },
+  "author": "Ammar",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "mongoose": "^7.1.0",
+    "morgan": "^1.10.0",
+    "slugify": "^1.6.6"
+  }
+}

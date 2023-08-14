@@ -35,6 +35,7 @@ const server = app.listen(PORT,()=>{
     console.log(`App Running On http://localhost:${PORT}/`);
 });
 
+//Handle Unhandled Promise Rejection
 process.on("unhandledRejection" , (err)=>{
     console.log("UNHANDLED REJECTION!");
     console.log(err.name , err.message);

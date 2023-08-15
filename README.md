@@ -1,6 +1,6 @@
 # Ecommerce API
 
-The Ecommerce API is a powerful tool for building and managing your online store's backend. It provides a set of endpoints that allow you to handle various aspects of your ecommerce platform, such as managing products, processing orders, and handling customer information.
+The Ecommerce API is a powerful tool for building and managing your online store's backend. It provides a set of endpoints that allow you to handle various aspects of your ecommerce platform, such as managing products, categories, processing orders, and handling customer information.
 
 ## Getting Started
 
@@ -30,23 +30,33 @@ Follow these steps to get started with the Ecommerce API:
 
 The Ecommerce API provides the following endpoints for interacting with your online store:
 
-- `GET /products`: Get a list of all products.
-- `GET /products/:id`: Get details of a specific product by its ID.
-- `POST /products`: Add a new product to the store.
-- `PUT /products/:id`: Update product details.
-- `DELETE /products/:id`: Delete a product from the store.
+- **Products**:
+  - `GET /products`: Get a list of all products.
+  - `GET /products/:id`: Get details of a specific product by its ID.
+  - `POST /products`: Add a new product to the store.
+  - `PUT /products/:id`: Update product details.
+  - `DELETE /products/:id`: Delete a product from the store.
 
-- `GET /orders`: Get a list of all orders.
-- `GET /orders/:id`: Get details of a specific order by its ID.
-- `POST /orders`: Place a new order.
-- `PUT /orders/:id`: Update order status.
-- `DELETE /orders/:id`: Cancel an order.
+- **Categories**:
+  - `GET /categories`: Get a list of all categories.
+  - `GET /categories/:id`: Get details of a specific category by its ID.
+  - `POST /categories`: Add a new category.
+  - `PUT /categories/:id`: Update category details.
+  - `DELETE /categories/:id`: Delete a category.
 
-- `GET /customers`: Get a list of all customers.
-- `GET /customers/:id`: Get details of a specific customer by their ID.
-- `POST /customers`: Add a new customer to the store.
-- `PUT /customers/:id`: Update customer information.
-- `DELETE /customers/:id`: Remove a customer's account.
+- **Orders**:
+  - `GET /orders`: Get a list of all orders.
+  - `GET /orders/:id`: Get details of a specific order by its ID.
+  - `POST /orders`: Place a new order.
+  - `PUT /orders/:id`: Update order status.
+  - `DELETE /orders/:id`: Cancel an order.
+
+- **Customers**:
+  - `GET /customers`: Get a list of all customers.
+  - `GET /customers/:id`: Get details of a specific customer by their ID.
+  - `POST /customers`: Add a new customer to the store.
+  - `PUT /customers/:id`: Update customer information.
+  - `DELETE /customers/:id`: Remove a customer's account.
 
 Please refer to the API documentation for detailed information about request and response formats for each endpoint.
 
@@ -60,6 +70,6 @@ The API returns meaningful error responses for various scenarios, including inva
 
 ## Conclusion
 
-The Ecommerce API simplifies the backend development process for your online store. By following the steps in this README, you can quickly set up the API, manage products, orders, and customers, and create a seamless shopping experience for your users. For detailed information, check the API documentation provided in the repository.
+The Ecommerce API simplifies the backend development process for your online store. By following the steps in this README, you can quickly set up the API, manage products, categories, orders, and customers, and create a seamless shopping experience for your users. For detailed information, check the API documentation provided in the repository.
 
 Feel free to contribute, report issues, and suggest improvements to make the Ecommerce API even better!

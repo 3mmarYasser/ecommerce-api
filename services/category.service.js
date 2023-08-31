@@ -11,7 +11,10 @@ exports.getCategories = asyncHandler(async (req, res)=>{
     const page= req.query.page * 1||1;
     const limit =req.query.limit *1 ||5;
     const skip = (page-1) * limit;
-    const categories = await Category.find({}).skip(skip).limit(limit)
+    const categories = await Category
+        .find({})
+        .skip(skip)
+        .limit(limit);
     res.status(200).json({results:categories.length ,page, data:categories});
 })
 
@@ -30,8 +33,8 @@ exports.getCategoryById = asyncHandler(async (req , res,next )=>{
 // @desc Create Category
 // @route POST /api/v1/categories
 // @access Private
-exports.createCategory = asyncHandler(async (req , res,next)=>{
-    const name = req.body.name;
+exports.createCategory = asyncHandler(async (req , res)=>{
+    const {name} = req.body;
     const category =  await Category.create({
         name,
         slug:slugify(name)

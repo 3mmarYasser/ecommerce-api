@@ -7,6 +7,7 @@ const ApiError = require("./utils/apiError")
 const globalError = require("./middlewares/error.middleware")
 const dbConnection = require("./config/database");
 const categoryRoute = require("./routes/category.route");
+const subCategoryRoute = require("./routes/subCategory.route");
 
 dbConnection();
 
@@ -14,15 +15,20 @@ const app = express();
 
 app.use(express.json());
 
+console.log(`Environment mode: ${process.env.NODE_ENV}`);
 if (process.env.NODE_ENV === "development"){
     app.use(morgen("dev"))
-    console.log(`Environment mode: ${process.env.NODE_ENV}`)
-
+}else if (process.env.NODE_ENV === "production"){
+    app.use(morgen("combined"))
 }
 
 // Mount Routes
 
 app.use("/api/v1/categories",categoryRoute)
+app.use("/api/v1/subCategories",subCategoryRoute)
+app.get("/" , (req , res)=>{
+    res.json({message:"Welcome To Ecommerce API" ,made_by:"Ammar" ,"status":"success" })
+})
 app.all("*" , ( req, res, next)=>{
     next(new ApiError(`Can't find this this route ${req.originalUrl}` , 400))
 })

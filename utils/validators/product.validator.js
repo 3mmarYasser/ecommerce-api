@@ -1,6 +1,7 @@
 const { check } = require('express-validator');
 const validatorMiddleware = require("../../middlewares/validator.middleware");
-
+const Category = require("../../models/category.model");
+const SubCategory = require("../../models/subCategory.model");
 exports.getProductByIdValidator = [
     check('id').isMongoId().withMessage("Invalid Product ID Format"),
     validatorMiddleware
@@ -38,10 +39,27 @@ exports.createProductValidator = [
     check("images").optional().isArray().withMessage("Product Images Must Be An Array"),
 
     check("category").notEmpty().withMessage("Product Category is Required")
-        .isMongoId().withMessage("Invalid Category Id"),
+        .isMongoId().withMessage("Invalid Category Id")
+        .custom(async (value )=>{
+            const category = await Category.findById(value);
+            if(!category){
+                throw new Error("Category Not Found");
+            }
+            return true;
+        })
+    ,
 
-    check("subCategory").optional().isArray().withMessage("Product Sub Category Must Be An Array")
-        .isMongoId().withMessage("Invalid Sub Category Id"),
+    check("subCategories").optional().isArray().withMessage("Product Sub Category Must Be An Array")
+        .isMongoId().withMessage("Invalid Sub Category Id")
+        .custom(async (value,{req})=>{
+            const subCategories = await SubCategory.find({_id:{$exists:true ,$in:value}});
+            if(subCategories.length !== value.length){
+                throw new Error("Sub Category Not Found");
+            }
+            return true;
+        })
+
+    ,
 
     check("brand").optional().notEmpty().withMessage("Product Brand is Required")
         .isMongoId().withMessage("Invalid Brand Id"),

@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:[true,"Please Enter Product Slug"],
         lowercase:true,
+        unique:[true,"Product Slug Must Be Unique"],
     },
     description:{
         type:String,
@@ -48,7 +49,7 @@ const productSchema = new mongoose.Schema({
         ref:"Category",
         required:[true,"Please Enter Product Category"]
     },
-    subCategory:[
+    subCategories:[
         {
             type:mongoose.Schema.ObjectId,
             ref:"SubCategory"

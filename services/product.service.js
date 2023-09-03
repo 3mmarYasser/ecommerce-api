@@ -47,7 +47,7 @@ exports.updateProduct = asyncHandler(async (req , res,next)=>{
 exports.deleteProduct = asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
     const product = await Product.findByIdAndDelete(id)
-    if(!product) return next(new ApiError("Category Not Found" ,404))
+    if(!product) return next(new ApiError("Product Not Found" ,404))
 
     res.status(204).send()
 })

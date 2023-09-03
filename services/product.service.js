@@ -11,13 +11,17 @@ exports.getProducts = asyncHandler(async (req, res)=>{
     const products = await Product
         .find({})
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate({path:"category",select:"name -_id"});
     res.status(200).json({results:products.length ,page, data:products});
 })
 
 exports.getProductById = asyncHandler(async (req , res,next )=>{
     const {id} = req.params;
-    const product = await Product.findById(id);
+    const product = await Product
+        .findById(id)
+        .populate({path:"category",select:"name -_id"});
+    ;
     if(!product) return next(new ApiError("Product Not Found" ,404))
     res.status(200).json({data:product})
 })
@@ -30,9 +34,8 @@ exports.createProduct = asyncHandler(async (req , res)=>{
 
 exports.updateProduct = asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
-    req.body.slug = slugify(req.body.title);
-
-    const product = await Category.findOneAndUpdate(
+    req.body.title? req.body.slug = slugify(req.body.title):null;
+    const product = await Product.findOneAndUpdate(
         {_id:id},
         req.body,
         {new:true});

@@ -56,8 +56,23 @@ exports.createProductValidator = [
             if(subCategories.length !== value.length){
                 throw new Error("Sub Category Not Found");
             }
+            subCategories.forEach((subCategory)=>{
+                if(subCategory.category.toString() !== req.body.category){
+                    throw new Error(`Sub Category With Id ${subCategory.category.toString()} That Have Name '${subCategory.name}' Not Belong To This Category With Id ${req.body.category}`);
+                }
+            })
             return true;
         })
+        // .custom(async (value ,{req})=>{
+        //    await SubCategory.find({category: req.body.category}).then((subCategories)=>{
+        //         const subCategoriesIds = []
+        //         subCategories.map((subCategory)=>subCategoriesIds.push(subCategory._id.toString()));
+        //         if(!value.every((x)=>subCategoriesIds.includes(x))){
+        //            return Promise.reject("Sub Category Not Belong To This Category");
+        //         }
+        //     })
+        //     return true;
+        // })
 
     ,
 

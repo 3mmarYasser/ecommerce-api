@@ -15,6 +15,10 @@ const CategorySchema = new mongoose.Schema({
     image:String
 },{timestamps:true}
 )
-
+CategorySchema.post("init", (doc,next) =>{
+    if(doc.image){
+        doc.image = process.env.APP_URL+"/"+doc.image
+    }
+})
 const CategoryModel = mongoose.model("Category",CategorySchema);
 module.exports = CategoryModel

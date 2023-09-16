@@ -1,6 +1,9 @@
+const path = require("path");
+
 const express =require("express");
 const dotenv = require("dotenv");
 const morgen = require("morgan");
+
 dotenv.config({path:"./config.env"});
 
 const ApiError = require("./utils/apiError")
@@ -16,6 +19,7 @@ dbConnection();
 const app = express();
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname , "uploads")));
 
 console.log(`Environment mode: ${process.env.NODE_ENV}`);
 if (process.env.NODE_ENV === "development"){

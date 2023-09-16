@@ -1,6 +1,8 @@
 const { check, body} = require('express-validator');
 const validatorMiddleware = require("../../middlewares/validator.middleware");
 const slugify = require('slugify');
+
+
 exports.getBrandByIdValidator = [
     check('id').isMongoId().withMessage("Invalid Brand ID Format"),
     validatorMiddleware
@@ -13,6 +15,13 @@ exports.createBrandValidator = [
             req.body.slug = slugify(value);
             return true;
         }),
+    check('image').notEmpty().withMessage("Brand Image is Required")
+        .custom((value)=>{
+            if(value && ( value.endsWith(".png") || value.endsWith(".jpg") || value.endsWith(".jpeg"))){
+                return true;
+            }
+            throw new Error("Invalid Image Format");
+        }),
     validatorMiddleware
 ];
 
@@ -23,8 +32,13 @@ exports.updateBrandValidator = [
         .custom((value , {req})=>{
             req.body.slug = slugify(value);
             return true;
-        })
-    ,
+        }),
+    check("image").optional().custom((value)=>{
+        if(value && ( value.endsWith(".png") || value.endsWith(".jpg") || value.endsWith(".jpeg"))){
+            return true;
+        }
+        throw new Error("Invalid Image Format");
+    }),
     validatorMiddleware
 ];
 

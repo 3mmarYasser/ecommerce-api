@@ -40,9 +40,23 @@ exports.createProductValidator = [
 
     check("colors").optional().isArray().withMessage("Product Colors Must Be An Array"),
 
-    check("imageCover").notEmpty().withMessage("Product Image Cover is Required"),
+    check("imageCover").notEmpty().withMessage("Product Image Cover is Required").custom((value)=>{
+        if(value && ( value.endsWith(".png") || value.endsWith(".jpg") || value.endsWith(".jpeg"))){
+            return true;
+        }
+        throw new Error("Invalid Image Format");
+    }),
 
-    check("images").optional().isArray().withMessage("Product Images Must Be An Array"),
+    check("images").optional().isArray().withMessage("Product Images Must Be An Array").custom((value)=>{
+        if(value && value.length > 0){
+            value.forEach((image)=>{
+                if(!image.endsWith(".png") && !image.endsWith(".jpg") && !image.endsWith(".jpeg")){
+                    throw new Error("Invalid Image Format");
+                }
+            })
+        }
+        return true;
+    }),
 
     check("category").notEmpty().withMessage("Product Category is Required")
         .isMongoId().withMessage("Invalid Category Id")
@@ -100,6 +114,12 @@ exports.updateProductValidator = [
             req.body.slug = slugify(value);
             return true;
         }),
+    check('imageCover').optional().custom((value)=>{
+    if(value && ( value.endsWith(".png") || value.endsWith(".jpg") || value.endsWith(".jpeg"))){
+        return true;
+    }
+    throw new Error("Invalid Image Format");
+}),
     validatorMiddleware
 ];
 exports.deleteProductValidator = [

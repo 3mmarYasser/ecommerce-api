@@ -14,6 +14,13 @@ exports.createCategoryValidator = [
             req.body.slug = slugify(value);
             return true;
         }),
+    check('image').notEmpty().withMessage("Category Image is Required")
+        .custom((value)=>{
+            if(value && (value.endsWith(".jpg") || value.endsWith(".jpeg") || value.endsWith(".png"))){
+                return true;
+            }
+            throw new Error("Invalid Image Format");
+    }),
     validatorMiddleware
 ];
 
@@ -23,9 +30,14 @@ exports.updateCategoryValidator = [
         .custom((value , {req})=>{
             req.body.slug = slugify(value);
             return true;
-        })
+        }),
+    check('image').optional().custom((value)=>{
+        if(value.endsWith(".jpg") || value.endsWith(".jpeg") || value.endsWith(".png")){
+            return true;
+        }
+        throw new Error("Invalid Image Format");
+    }),
 
-    ,
     validatorMiddleware
 ];
 

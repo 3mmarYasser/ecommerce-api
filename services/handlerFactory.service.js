@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const ApiError = require("./../utils/apiError");
 const ApiFeatures = require("./../utils/apiFeatures");
+const {excludeProps, includeProps} = require("../utils/dealWithObj");
 
 exports.deleteOne = Model => asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
@@ -10,9 +11,13 @@ exports.deleteOne = Model => asyncHandler(async (req , res,next)=>{
     res.status(204).send()
 })
 
-exports.updateOne = Model => asyncHandler(async (req , res,next)=>{
+exports.updateOne = (Model,excludedProps=[],includedProps=[]) => asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
-    const doc = await Model.findByIdAndUpdate(id,req.body,{new:true})
+    let body = excludeProps(req.body,excludedProps) // exclude some props from req.body
+
+    body = includeProps(body,includedProps) // include some props from req.body
+
+    const doc = await Model.findByIdAndUpdate(id,body,{new:true})
 
     if(!doc) return next(new ApiError(`${Model.modelName} Not Found` ,404))
 

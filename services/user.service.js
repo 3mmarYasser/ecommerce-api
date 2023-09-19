@@ -27,6 +27,8 @@ exports.getUserById = handlerFactory.getOne(User);
 
 exports.createUser = handlerFactory.createOne(User);
 
-exports.updateUser = handlerFactory.updateOne(User);
+exports.changeUserPassword = handlerFactory.updateOne(User,[],["password"]);
+
+exports.updateUser =  handlerFactory.updateOne(User,["password","active"]);
 
 exports.deleteUser = handlerFactory.deleteOne(User);

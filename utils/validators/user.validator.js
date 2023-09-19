@@ -1,6 +1,7 @@
 const {check, body, param} = require("express-validator");
 const validatorMiddleware = require("../../middlewares/validator.middleware");
 const User = require('../../models/user.model');
+const bcrypt = require("bcryptjs");
 
 exports.getUserByIdValidator = [
     param("id").isMongoId().withMessage("Invalid User ID Format"),
@@ -25,7 +26,15 @@ exports.createUserValidator = [
             }
         }),
 
-    body("password").notEmpty().withMessage("Password is Required"),
+    body("password").notEmpty().withMessage("Password is Required").isLength({min: 6}).withMessage("Password must be at least 6 characters")
+
+    ,
+    body("passwordConfirm").notEmpty().withMessage("Password Confirmation is Required").custom((value, {req}) => {
+        if(value !== req.body.password){
+            throw new Error("Password Confirmation does not match Password");
+        }
+        return true;
+    }),
 
     body("phone").optional().isMobilePhone(["ar-EG","ar-SA","en-US"]).withMessage("Invalid Phone Number"),
 
@@ -34,6 +43,31 @@ exports.createUserValidator = [
 ]
 exports.updateUserValidator = [
     param("id").isMongoId().withMessage("Invalid User ID Format"),
+    validatorMiddleware
+]
+exports.changeUserPasswordValidator = [
+    param("id").isMongoId().withMessage("Invalid User ID Format"),
+
+    body("currentPassword").notEmpty().withMessage("Current Password is Required")
+        .custom(async (value, {req}) => {
+            const user = await User.findById(req.params.id);
+            if(!user) return Promise.reject("User Not Found");
+            const isMatch = await bcrypt.compare(value, user.password);
+            if(!isMatch) return Promise.reject("Current Password is Incorrect");
+            return true
+        }),
+
+    body("password").notEmpty().withMessage("Password is Required")
+        .isLength({min: 6}).withMessage("Password must be at least 6 characters"),
+
+    body("passwordConfirm").notEmpty().withMessage("Password Confirmation is Required")
+        .custom((value, {req}) => {
+            if(value !== req.body.password){
+                throw new Error("Password Confirmation does not match Password");
+            }
+            return true;
+        }),
+
     validatorMiddleware
 ]
 exports.deleteUserValidator = [

@@ -21,7 +21,7 @@ exports.resizeUserImage = async (req, res, next) => {
     }
     next()
 };
-exports.getUsers = handlerFactory.getAll(User);
+exports.getUsers = handlerFactory.getAll(User,[],["username","email","phone","role"]);
 
 exports.getUserById = handlerFactory.getOne(User);
 

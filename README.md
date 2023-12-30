@@ -23,7 +23,7 @@ Follow these steps to get started with the Ecommerce API:
 
 5. **Start the Server**: Run the following command to start the API server:
    ```
-   npm start
+   npm run start:dev
    ```
 
 ## API Endpoints

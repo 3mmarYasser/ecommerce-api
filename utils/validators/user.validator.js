@@ -46,7 +46,11 @@ exports.updateUserValidator = [
     validatorMiddleware
 ]
 exports.changeUserPasswordValidator = [
-    param("id").isMongoId().withMessage("Invalid User ID Format"),
+    param("id").isMongoId().withMessage("Invalid User ID Format").custom((value,{req})=>{
+        req.body.passwordChangedAt = Date.now();
+        console.log(req.body.passwordChangedAt)
+        return true;
+    }),
 
     body("currentPassword").notEmpty().withMessage("Current Password is Required")
         .custom(async (value, {req}) => {
@@ -67,7 +71,6 @@ exports.changeUserPasswordValidator = [
             }
             return true;
         }),
-
     validatorMiddleware
 ]
 exports.deleteUserValidator = [

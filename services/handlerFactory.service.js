@@ -8,10 +8,10 @@ exports.deleteOne = Model => asyncHandler(async (req , res,next)=>{
     const doc = await Model.findByIdAndDelete(id)
     if(!doc) return next(new ApiError(`${Model.modelName} Not Found` ,404))
 
-    res.status(204).send()
+    res.status(204).send();
 })
 
-exports.updateOne = (Model,excludedProps=[],includedProps=[]) => asyncHandler(async (req , res,next)=>{
+exports.updateOne = (Model,excludedProps=[],includedProps=[],additionalRes=(req,res,next)=>{return {}}) => asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
     let body = excludeProps(req.body,excludedProps) // exclude some props from req.body
 
@@ -21,7 +21,7 @@ exports.updateOne = (Model,excludedProps=[],includedProps=[]) => asyncHandler(as
 
     if(!doc) return next(new ApiError(`${Model.modelName} Not Found` ,404))
 
-    res.status(200).json({data:doc})
+    res.status(200).json({data:doc , ...(additionalRes(req,res,next))})
 })
 
 exports.createOne = Model => asyncHandler(async (req , res)=>{

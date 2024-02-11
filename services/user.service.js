@@ -1,9 +1,11 @@
+const asyncHandler = require("express-async-handler");
 const handlerFactory = require("./handlerFactory.service")
 const {uploadSingleImage} = require("../middlewares/upload.middleware");
 const {v4:uuid4} = require("uuid");
 const {dirExist} = require("../utils/dirExist");
 const sharp = require("sharp");
 const User = require('../models/user.model');
+const generateToken = require("../utils/generateToken");
 
 exports.uploadUserImage = uploadSingleImage( "profileImage")
 
@@ -27,8 +29,24 @@ exports.getUserById = handlerFactory.getOne(User);
 
 exports.createUser = handlerFactory.createOne(User);
 
-exports.changeUserPassword = handlerFactory.updateOne(User,[],["password","passwordChangedAt"]);
 
-exports.updateUser =  handlerFactory.updateOne(User,["password","active"]);
+exports.updateUser =  handlerFactory.updateOne(User);
 
 exports.deleteUser = handlerFactory.deleteOne(User);
+
+exports.getLoggedUserData = asyncHandler(async (req , res,next)=>{
+    req.params.id = req.user._id;
+    next();
+})
+exports.updateLoggedUser =  handlerFactory.updateOne(User,[],["email","phone","profileImage"]);
+exports.changeLoggedUserPassword = handlerFactory.updateOne(User,[],["password","passwordChangedAt"],
+(req)=> {return {token:generateToken(req.user)}}
+);
+exports.deleteLoggedUser = asyncHandler(async (req , res,next)=>{
+   const user =await User.findByIdAndUpdate(req.user._id , {active:false});
+    if(!user) return next(new ApiError("User Not Found",404))
+    res.status(204).json({
+        status:"success",
+        message:"User Deleted Successfully"
+    });
+});

@@ -43,12 +43,13 @@ exports.createUserValidator = [
 ]
 exports.updateUserValidator = [
     param("id").isMongoId().withMessage("Invalid User ID Format"),
+    body("phone").optional().isMobilePhone(["ar-EG","ar-SA","en-US"]).withMessage("Invalid Phone Number"),
+    body("email").optional().isEmail().withMessage("Invalid Email Format"),
     validatorMiddleware
 ]
 exports.changeUserPasswordValidator = [
     param("id").isMongoId().withMessage("Invalid User ID Format").custom((value,{req})=>{
-        req.body.passwordChangedAt = Date.now();
-        console.log(req.body.passwordChangedAt)
+
         return true;
     }),
 

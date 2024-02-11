@@ -26,9 +26,12 @@ const UserSchema = mongoose.Schema({
         minlength: [6, "Password must be at least 6 characters"],
     },
     passwordChangedAt: Date,
+    passwordResetCode: String,
+    passwordResetExpires: Date,
+    passwordResetVerified:Boolean,
     role:{
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user","manager","admin"],
         default: "user",
     },
     active:{
@@ -46,6 +49,7 @@ UserSchema.pre("save", async function  hashPassword(next){
 UserSchema.pre("findOneAndUpdate", async function (next) {
     if(!this._update.password) return next();
     this._update.password = await bcrypt.hash(this._update.password, 12);
+    this._update.passwordChangedAt = Date.now();
     next();
 })
 

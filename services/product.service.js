@@ -43,7 +43,7 @@ exports.resizeProductImages = async (req , res , next)=>{
 }
 exports.getProducts = handlerFactory.getAll(Product)
 
-exports.getProductById = handlerFactory.getOne(Product)
+exports.getProductById = handlerFactory.getOne(Product,"reviews")
 
 exports.createProduct = handlerFactory.createOne(Product)
 

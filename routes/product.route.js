@@ -3,7 +3,9 @@ const router = express.Router();
 const { getProducts, createProduct, getProductById, updateProduct, deleteProduct,resizeProductImages ,uploadProductImages } = require("../services/product.service");
 const { getProductByIdValidator, createProductValidator, updateProductValidator, deleteProductValidator } = require("../utils/validators/product.validator");
 const AuthService = require("../services/auth.service");
+const reviewRouter = require("./review.route");
 
+router.use("/:productId/reviews" , reviewRouter)
 router.route("/")
     .get(getProducts)
     .post(

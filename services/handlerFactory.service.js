@@ -3,12 +3,14 @@ const ApiError = require("./../utils/apiError");
 const ApiFeatures = require("./../utils/apiFeatures");
 const {excludeProps, includeProps} = require("../utils/dealWithObj");
 
-exports.deleteOne = Model => asyncHandler(async (req , res,next)=>{
+exports.deleteOne = (Model,additionalRes=(req,res,next)=>{return {}}) => asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
-    const doc = await Model.findByIdAndDelete(id)
+    const doc = await Model.findOneAndDelete({ _id: id });
     if(!doc) return next(new ApiError(`${Model.modelName} Not Found` ,404))
-
-    res.status(204).send();
+    await doc.constructor.calcAverageRatingsAndQuantity(doc.product);
+    doc.deleteOne();
+    res.status(204).json({message:`${Model.modelName} Deleted Successfully`
+        , ...(additionalRes(req, res, next))})
 })
 
 exports.updateOne = (Model,excludedProps=[],includedProps=[],additionalRes=(req,res,next)=>{return {}}) => asyncHandler(async (req , res,next)=>{
@@ -20,7 +22,7 @@ exports.updateOne = (Model,excludedProps=[],includedProps=[],additionalRes=(req,
     const doc = await Model.findByIdAndUpdate(id,body,{new:true})
 
     if(!doc) return next(new ApiError(`${Model.modelName} Not Found` ,404))
-
+    await doc.save();
     res.status(200).json({data:doc , ...(additionalRes(req,res,next))})
 })
 
@@ -41,6 +43,7 @@ exports.getOne = (Model,popOptions) => asyncHandler(async (req , res,next)=>{
 exports.getAll = (Model,popOptions,searchFields) => asyncHandler(async (req , res)=>{
     let filterObj ={};
     if(req.filterObject) filterObj = req.filterObject;
+    console.log(filterObj)
     const documentsCounts = await Model.countDocuments();
     const apiFeatures = new ApiFeatures(Model.find(filterObj), req.query)
         .paginate(documentsCounts)

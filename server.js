@@ -17,6 +17,7 @@ const userRoute = require("./routes/user.route");
 const authRoute = require("./routes/auth.route");
 const reviewRoute = require("./routes/review.route");
 const wishlistRoute = require("./routes/wishlist.route");
+const addressRoute = require("./routes/address.route");
 dbConnection();
 
 const app = express();
@@ -41,6 +42,7 @@ app.use("/api/v1/users",userRoute)
 app.use("/api/v1/auth",authRoute)
 app.use("/api/v1/review", reviewRoute)
 app.use("/api/v1/wishlist", wishlistRoute)
+app.use("/api/v1/addresses", addressRoute)
 app.get("/" , (req , res)=>{
     res.json({message:"Welcome To Ecommerce API" ,made_by:"Ammar" ,"status":"success" })
 })

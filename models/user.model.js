@@ -44,6 +44,17 @@ const UserSchema = mongoose.Schema({
             ref: "Product",
         }
     ],
+    addresses:[
+        {
+            id:{type: mongoose.Schema.Types.ObjectId},
+            alias:String,
+            details:String,
+            phone:String,
+            city:String,
+            postalCode:String,
+
+        }
+    ],
 
 },{timestamps: true});
 
@@ -57,6 +68,10 @@ UserSchema.pre("findOneAndUpdate", async function (next) {
     if(!this._update.password) return next();
     this._update.password = await bcrypt.hash(this._update.password, 12);
     this._update.passwordChangedAt = Date.now();
+    next();
+})
+UserSchema.pre(/^find/, function (next) {
+    this.find({active: {$ne: false}});
     next();
 })
 

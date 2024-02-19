@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const handlerFactory = require("./handlerFactory.service")
 const User = require('../models/user.model');
 
 exports.addProductToWishlist = asyncHandler(async (req, res, next) => {

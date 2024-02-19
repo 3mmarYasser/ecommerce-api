@@ -51,12 +51,21 @@ Schema.statics.calcAverageRatingsAndQuantity = async function (productId){
             ratingsAverage:result[0].ratingsAverage,
             ratingsQuantity:result[0].ratingsQuantity
         })
+    }else {
+        await this.model("Product").findByIdAndUpdate(productId,{
+            ratingsAverage:0,
+            ratingsQuantity:0
+        })
     }
 }
 Schema.post("save",async function (){
     await this.constructor.calcAverageRatingsAndQuantity(this.product)
 })
-Schema.post("deleteOne",async function (){
-    await this.constructor.calcAverageRatingsAndQuantity(this.product)
-})
+Schema.post('findOneAndDelete', async function (doc) {
+    if(doc){
+        const Review = mongoose.model('Review');
+        await Review.calcAverageRatingsAndQuantity(doc.product);
+    }
+});
+
 module.exports = mongoose.model("Review", Schema);

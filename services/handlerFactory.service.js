@@ -5,9 +5,8 @@ const {excludeProps, includeProps} = require("../utils/dealWithObj");
 
 exports.deleteOne = (Model,additionalRes=(req,res,next)=>{return {}}) => asyncHandler(async (req , res,next)=>{
     const {id} = req.params;
-    const doc = await Model.findOneAndDelete({ _id: id });
+    const doc = await Model.findByIdAndDelete(id)
     if(!doc) return next(new ApiError(`${Model.modelName} Not Found` ,404))
-    await doc.constructor.calcAverageRatingsAndQuantity(doc.product);
     doc.deleteOne();
     res.status(204).json({message:`${Model.modelName} Deleted Successfully`
         , ...(additionalRes(req, res, next))})
@@ -26,8 +25,10 @@ exports.updateOne = (Model,excludedProps=[],includedProps=[],additionalRes=(req,
     res.status(200).json({data:doc , ...(additionalRes(req,res,next))})
 })
 
-exports.createOne = Model => asyncHandler(async (req , res)=>{
-    const doc =  await Model.create(req.body);
+exports.createOne = (Model,excludedProps=[],includedProps=[]) => asyncHandler(async (req , res)=>{
+    let body = excludeProps(req.body,excludedProps) // exclude some props from req.body
+     body = includeProps(body,includedProps) // include some props from req.body
+    const doc =  await Model.create(body);
     res.status(201).json({data:doc})
 })
 

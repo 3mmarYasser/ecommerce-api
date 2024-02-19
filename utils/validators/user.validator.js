@@ -1,4 +1,4 @@
-const {check, body, param} = require("express-validator");
+const {body, param} = require("express-validator");
 const validatorMiddleware = require("../../middlewares/validator.middleware");
 const User = require('../../models/user.model');
 const bcrypt = require("bcryptjs");

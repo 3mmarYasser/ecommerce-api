@@ -9,15 +9,8 @@ dotenv.config({path:"./config.env"});
 const ApiError = require("./utils/apiError")
 const globalError = require("./middlewares/error.middleware")
 const dbConnection = require("./config/database");
-const categoryRoute = require("./routes/category.route");
-const subCategoryRoute = require("./routes/subCategory.route");
-const brandRoute = require("./routes/brand.route");
-const productRoute = require("./routes/product.route");
-const userRoute = require("./routes/user.route");
-const authRoute = require("./routes/auth.route");
-const reviewRoute = require("./routes/review.route");
-const wishlistRoute = require("./routes/wishlist.route");
-const addressRoute = require("./routes/address.route");
+const mountRoutes = require("./routes");
+
 dbConnection();
 
 const app = express();
@@ -33,16 +26,7 @@ if (process.env.NODE_ENV === "development"){
 }
 
 // Mount Routes
-
-app.use("/api/v1/categories",categoryRoute)
-app.use("/api/v1/subCategories",subCategoryRoute)
-app.use("/api/v1/brands",brandRoute)
-app.use("/api/v1/products",productRoute)
-app.use("/api/v1/users",userRoute)
-app.use("/api/v1/auth",authRoute)
-app.use("/api/v1/review", reviewRoute)
-app.use("/api/v1/wishlist", wishlistRoute)
-app.use("/api/v1/addresses", addressRoute)
+mountRoutes(app);
 app.get("/" , (req , res)=>{
     res.json({message:"Welcome To Ecommerce API" ,made_by:"Ammar" ,"status":"success" })
 })

@@ -40,10 +40,20 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
     }
 
 });
-exports.getCart = asyncHandler(async (req, res) => {
-    const cart = await Cart.findOne({ orderedBy: req.user._id }).select("-appliedCoupon");
+exports.getCart = asyncHandler(async (req, res,next) => {
+    const cart = await Cart.findOne({ orderedBy: req.user._id }).populate("appliedCoupon", "-_id name expire discount");
+    if(!cart) return next(new ApiError("Cart not found", 404));
+    const additionalData = {};
+    if(cart.appliedCoupon?.expire && new Date(cart.appliedCoupon?.expire).getTime() < Date.now()){
+        cart.totalAfterDiscount = undefined;
+        cart.appliedCoupon = undefined;
+        await cart.save();
+        additionalData.message = "Coupon expired";
+    }
+    cart.appliedCoupon.expire = undefined;
     return res.status(200).json({
         status: "success",
+        ...additionalData,
         data: {
             data: cart
         }

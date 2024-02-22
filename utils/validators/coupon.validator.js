@@ -24,7 +24,7 @@ exports.updateCouponValidator = [
     param('id').isMongoId().withMessage('Invalid coupon id format'),
     body('name').optional().notEmpty().withMessage('Coupon name is required'),
     body('discount').optional().notEmpty().withMessage('Coupon discount is required').isFloat({ min: 1, max: 100 }).withMessage('Discount must be between 1 to 100'),
-    body('expire').optional().notEmpty().withMessage('Coupon expire date is required').isDate().withMessage('Invalid date format'),
+    body('expire').optional().notEmpty().withMessage('Coupon expire date is required').isISO8601().toDate().withMessage('Invalid date format'),
     validatorMiddleware,
 ];
 exports.deleteCouponValidator = [

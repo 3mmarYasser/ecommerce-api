@@ -50,7 +50,7 @@ exports.getCart = asyncHandler(async (req, res,next) => {
         await cart.save();
         additionalData.message = "Coupon expired";
     }
-    cart.appliedCoupon.expire = undefined;
+    cart.appliedCoupon?.expire ? cart.appliedCoupon.expire = undefined:null;
     return res.status(200).json({
         status: "success",
         ...additionalData,

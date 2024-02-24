@@ -24,6 +24,13 @@ const ModelSchema = new mongoose.Schema({
         type:Number,
         default:0.0
     },
+    shippingAddress:{
+        address:String,
+        city:String,
+        postalCode:String,
+        phone:String,
+        country:String
+    },
     totalOrderPrice:Number,
     paymentMethod:{
         type:String,
@@ -43,4 +50,16 @@ const ModelSchema = new mongoose.Schema({
 
 },{timestamps:true});
 
+ModelSchema.pre(/^find/,function(next){
+    this.populate({
+        path:"user",
+        select:"username email"
+    }).populate({
+        path:"cartItems.product",
+        select:"title imageCover"
+    })
+    next();
+})
+
 module.exports = mongoose.model('Order', ModelSchema);
+

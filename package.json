@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start:prod": "NODE_ENV=production PORT=8001 node server.js",
+    "start:prod": "node server.js",
     "test": "echo \"All Tests Has Been Passed\" && exit 1"
   },
   "author": "Ammar",
@@ -13,6 +13,8 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
@@ -24,6 +26,7 @@
     "nodemailer": "^6.9.9",
     "sharp": "^0.32.5",
     "slugify": "^1.6.6",
+    "stripe": "^14.18.0",
     "uuid": "^9.0.1"
   }
 }

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start:prod": "node server.js",
+    "start:prod": "NODE_ENV=production node server.js",
     "test": "echo \"All Tests Has Been Passed\" && exit 1"
   },
   "author": "Ammar",
@@ -28,5 +28,8 @@
     "slugify": "^1.6.6",
     "stripe": "^14.18.0",
     "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }

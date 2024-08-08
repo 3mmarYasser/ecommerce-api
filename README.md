@@ -11,7 +11,7 @@ Follow these steps to get started with the Ecommerce API:
    git clone https://github.com/3mmarYasser/ecommerce-api.git
    ```
 
-2. **Install Dependencies**: Navigate to the project directory and install the required dependencies using your preferred package manager. For example, using npm:
+2. **Install Dependencies**: Navigate to the project directory and install the required dependencies using your preferred package manager. For example using npm:
    ```
    cd ecommerce-api
    npm install

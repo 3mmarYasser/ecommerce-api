@@ -51,12 +51,6 @@ The Ecommerce API provides the following endpoints for interacting with your onl
   - `PUT /orders/:id`: Update order status.
   - `DELETE /orders/:id`: Cancel an order.
 
-- **Customers**:
-  - `GET /customers`: Get a list of all customers.
-  - `GET /customers/:id`: Get details of a specific customer by their ID.
-  - `POST /customers`: Add a new customer to the store.
-  - `PUT /customers/:id`: Update customer information.
-  - `DELETE /customers/:id`: Remove a customer's account.
 
 Please refer to the API documentation for detailed information about request and response formats for each endpoint.
 
